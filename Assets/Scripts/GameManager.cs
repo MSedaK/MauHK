@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject characterA;
     public GameObject characterB;
-
     private GameObject activeCharacter;
 
     void Start()
@@ -26,10 +23,13 @@ public class GameManager : MonoBehaviour
 
     void SwapCharacter()
     {
+        Vector3 currentPosition = activeCharacter.transform.position;
+
         activeCharacter.SetActive(false);
 
         activeCharacter = (activeCharacter == characterA) ? characterB : characterA;
 
+        activeCharacter.transform.position = currentPosition;
         activeCharacter.SetActive(true);
     }
 }
