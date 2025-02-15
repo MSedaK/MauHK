@@ -12,17 +12,26 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) // Sadece oyuncuya çarptýðýnda hasar ver
+        if (other.CompareTag("Player")) // Oyuncuya çarptýysa
         {
             CharacterB player = other.GetComponent<CharacterB>();
             if (player != null)
             {
                 player.TakeDamage(damage);
             }
-            Destroy(gameObject);
+            Destroy(gameObject); // Mermiyi yok et
         }
-        else if (!other.CompareTag("Enemy")) // Eðer baþka bir nesneye çarparsa yok ol (duvar gibi)
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player")) // Oyuncuya çarptýðýnda çalýþacak
         {
+            CharacterB player = collision.gameObject.GetComponent<CharacterB>();
+            if (player != null)
+            {
+                player.TakeDamage(damage);
+            }
             Destroy(gameObject);
         }
     }

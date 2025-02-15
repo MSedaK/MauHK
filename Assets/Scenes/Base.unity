@@ -501,7 +501,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -586,7 +586,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -624,6 +624,7 @@ MonoBehaviour:
   attackRange: 2
   attackCooldown: 1.5
   damage: 15
+  moveSpeed: 3.5
 --- !u!1001 &73442535
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1539,7 +1540,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 29b4d3b3455063d47b2aa55de92ee2ad, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &242620457
 Transform:
@@ -1830,7 +1831,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &381326717
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1967,7 +1968,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 16
+  m_Constraints: 20
   m_CollisionDetection: 1
 --- !u!114 &381326723
 MonoBehaviour:
@@ -2168,7 +2169,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -2254,7 +2255,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 10
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -2294,7 +2295,7 @@ MonoBehaviour:
   firePoint: {fileID: 1496725392}
   attackRange: 15
   fireRate: 1
-  projectileSpeed: 15
+  moveSpeed: 3
 --- !u!4 &657162866 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8a50808e391150a40b6aac8a2386d1eb,
@@ -2941,7 +2942,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &858184378
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3022,7 +3023,7 @@ Transform:
   m_GameObject: {fileID: 858184377}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.9806573, z: -0, w: 0.19573282}
-  m_LocalPosition: {x: 0, y: 1.12, z: 0}
+  m_LocalPosition: {x: 2.9, y: 1.608, z: 0}
   m_LocalScale: {x: 1.4685, y: 1.4685, z: 1.4685}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3093,10 +3094,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 5
   runSpeed: 8
-  dashSpeed: 15
+  dashSpeed: 30
   dashDuration: 0.2
-  dashCooldown: 1
-  attackCooldown: 0.5
+  dashCooldown: 0.7
+  attackCooldown: 0.2
   strongAttackCooldown: 1.5
 --- !u!114 &858184385
 MonoBehaviour:
@@ -3124,7 +3125,7 @@ MonoBehaviour:
   strongSphereSpeed: 8
   maxStamina: 100
   stamina: 0
-  strongAttackCost: 100
+  strongAttackCost: 50
   staminaRegenRate: 20
   staminaBar: {fileID: 1662974884}
   maxHealth: 100
@@ -3984,7 +3985,6 @@ GameObject:
   - component: {fileID: 1024007881}
   - component: {fileID: 1024007884}
   - component: {fileID: 1024007883}
-  - component: {fileID: 1024007882}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -4007,27 +4007,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 858184381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1024007882
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1024007880}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1024007883
 MeshRenderer:
   m_ObjectHideFlags: 0

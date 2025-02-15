@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class CharacterB : MonoBehaviour
 {
     [Header("UI Settings")]
-    public GameObject infoPanel; // UI Panel (Inspector'dan atayacaksýn)
-    private HashSet<string> triggeredZones = new HashSet<string>(); // Hangi alanlara girildiðini takip eder
+    public GameObject infoPanel;
+    private HashSet<string> triggeredZones = new HashSet<string>();
 
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
@@ -38,11 +38,11 @@ public class CharacterB : MonoBehaviour
     [Header("Health Settings")]
     public int maxHealth = 100;
     public int currentHealth;
-    public int damageTaken = 20; // Düþmandan alýnan hasar
+    public int damageTaken = 20;
     public Slider healthBar;
-    public Image[] healthSegments; 
+    public Image[] healthSegments;
 
-    private Vector3 lastMouseDirection = Vector3.zero; // Son mouse yönünü saklýyoruz
+    private Vector3 lastMouseDirection = Vector3.zero;
 
     void Start()
     {
@@ -55,13 +55,13 @@ public class CharacterB : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         if (infoPanel != null)
-            infoPanel.SetActive(false); // UI baþlangýçta kapalý olacak
+            infoPanel.SetActive(false);
     }
 
     void Update()
     {
-        RotateTowardsMouse(); // Karakteri mouse yönüne döndür
-        HandleMovement(); // WASD ile hareket et
+        RotateTowardsMouse();
+        HandleMovement();
 
         if (Input.GetMouseButtonDown(0) && canAttack)
         {
@@ -79,9 +79,9 @@ public class CharacterB : MonoBehaviour
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
-        if (lastMouseDirection.magnitude >= 0.1f) // Mouse hareket ettiyse yön belirle
+        if (lastMouseDirection.magnitude >= 0.1f)
         {
-            Vector3 forwardDirection = lastMouseDirection; // Mouse'un yönüne göre hareket et
+            Vector3 forwardDirection = lastMouseDirection;
             moveDirection = (forwardDirection * moveZ + Vector3.Cross(Vector3.up, forwardDirection) * moveX).normalized;
 
             if (moveDirection.magnitude >= 0.1f)
@@ -97,30 +97,30 @@ public class CharacterB : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             Vector3 targetPosition = hit.point;
-            targetPosition.y = transform.position.y; // Y eksenini sabit tut
+            targetPosition.y = transform.position.y;
 
             Vector3 direction = (targetPosition - transform.position).normalized;
             if (direction.magnitude > 0.1f)
             {
-                lastMouseDirection = direction; // Mouse yönünü kaydet
-                Quaternion lookRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 15f);
+                lastMouseDirection = direction;
+                transform.rotation = Quaternion.LookRotation(direction);
             }
         }
     }
 
+
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("TriggerZone")) // Eðer bir "TriggerZone" içine girdiysek
+        if (other.CompareTag("TriggerZone"))
         {
-            if (!triggeredZones.Contains(other.gameObject.name)) // Daha önce girilmediyse
+            if (!triggeredZones.Contains(other.gameObject.name))
             {
-                triggeredZones.Add(other.gameObject.name); // Kaydet
-                StartCoroutine(ShowUIPanel()); // UI Panel aç
+                triggeredZones.Add(other.gameObject.name);
+                StartCoroutine(ShowUIPanel());
             }
         }
 
-        if (other.CompareTag("Enemy")) // Enemy'e temas ederse
+        if (other.CompareTag("Enemy"))
         {
             TakeDamage(damageTaken);
         }
@@ -140,19 +140,19 @@ public class CharacterB : MonoBehaviour
     void UpdateHealthUI()
     {
         float healthPercentage = (float)currentHealth / maxHealth;
-        healthBar.value = healthPercentage; // Slider güncelle
+        healthBar.value = healthPercentage;
 
         int activeSegments = Mathf.RoundToInt(healthPercentage * healthSegments.Length);
         for (int i = 0; i < healthSegments.Length; i++)
         {
-            healthSegments[i].enabled = i < activeSegments; // Parçalý bar güncelle
+            healthSegments[i].enabled = i < activeSegments;
         }
     }
 
     void Die()
     {
-        Debug.Log("Karakter öldü!");
-        gameObject.SetActive(false); // Þimdilik karakteri yok edelim
+        Debug.Log("Karakter Ã¶ldÃ¼!");
+        gameObject.SetActive(false);
     }
 
     IEnumerator ShowUIPanel()
@@ -160,7 +160,7 @@ public class CharacterB : MonoBehaviour
         if (infoPanel != null)
         {
             infoPanel.SetActive(true);
-            yield return new WaitForSeconds(3f); // 3 saniye sonra kapanacak
+            yield return new WaitForSeconds(3f);
             infoPanel.SetActive(false);
         }
     }
@@ -170,27 +170,19 @@ public class CharacterB : MonoBehaviour
         canAttack = false;
         anim.SetTrigger("Attack");
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
 
         GameObject bomb = Instantiate(sphereType, firePoint.position, Quaternion.identity);
         Rigidbody rb = bomb.GetComponent<Rigidbody>();
 
-        bomb.tag = "Bomb"; // Bomb tag'ini atýyoruz
-        Bomb bombScript = bomb.AddComponent<Bomb>(); // Bomb scripti ekle
-        bombScript.damage = (sphereType == spherePrefab) ? 10 : 20; // Eðer Strong ise 20 hasar
+        bomb.tag = "Bomb";
+        Bomb bombScript = bomb.AddComponent<Bomb>();
+        bombScript.damage = (sphereType == spherePrefab) ? 10 : 20;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            Vector3 direction = (hit.point - firePoint.position).normalized;
-            rb.velocity = direction * speed;
-        }
-        else
-        {
-            rb.velocity = firePoint.forward * speed;
-        }
+        Vector3 shootDirection = GetShootDirection();
+        rb.velocity = shootDirection * (speed * 2f);
 
-        yield return new WaitForSeconds(attackCooldown);
+        yield return new WaitForSeconds(attackCooldown / 2f);
         canAttack = true;
     }
 
@@ -206,24 +198,30 @@ public class CharacterB : MonoBehaviour
         GameObject bomb = Instantiate(strongSpherePrefab, firePoint.position, Quaternion.identity);
         Rigidbody rb = bomb.GetComponent<Rigidbody>();
 
-        bomb.tag = "Bomb"; // Bomb tag'ini atýyoruz
-        Bomb bombScript = bomb.AddComponent<Bomb>(); // Bomb scripti ekle
-        bombScript.damage = 20; // Güçlü bombanýn hasarý daha fazla
+        bomb.tag = "Bomb";
+        Bomb bombScript = bomb.AddComponent<Bomb>();
+        bombScript.damage = 20;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            Vector3 direction = (hit.point - firePoint.position).normalized;
-            rb.velocity = direction * strongSphereSpeed;
-        }
-        else
-        {
-            rb.velocity = firePoint.forward * strongSphereSpeed;
-        }
+        Vector3 shootDirection = GetShootDirection();
+        rb.velocity = shootDirection * (strongSphereSpeed * 1.5f);
 
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
     }
+
+    Vector3 GetShootDirection()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            Vector3 direction = (hit.point - firePoint.position).normalized;
+            lastMouseDirection = direction;
+            return direction;
+        }
+
+        return lastMouseDirection;
+    }
+
 
     void RegenerateStamina()
     {

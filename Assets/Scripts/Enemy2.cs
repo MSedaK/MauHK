@@ -1,19 +1,24 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy2 : MonoBehaviour
 {
     public int health = 100;
-    public float attackRange = 2f; // Yakýn dövüþ mesafesi
-    public float attackCooldown = 1.5f; // Kaç saniyede bir saldýracak
+    public float attackRange = 2f; 
+    public float attackCooldown = 1.5f; 
     private float nextAttackTime = 0f;
-    public int damage = 15; // Oyuncuya vereceði hasar
+    public int damage = 15; 
+    public float moveSpeed = 3.5f; 
 
     private Transform player;
+    private NavMeshAgent agent;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        agent = GetComponent<NavMeshAgent>();
+        agent.speed = moveSpeed; 
+        agent.speed = moveSpeed;
     }
 
     void Update()
@@ -22,10 +27,18 @@ public class Enemy2 : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, player.position);
 
-        if (distance <= attackRange && Time.time >= nextAttackTime)
+        if (distance > attackRange)
         {
-            nextAttackTime = Time.time + attackCooldown;
-            Attack();
+            agent.SetDestination(player.position);
+        }
+        else
+        {
+            agent.SetDestination(transform.position);
+            if (Time.time >= nextAttackTime)
+            {
+                nextAttackTime = Time.time + attackCooldown;
+                Attack();
+            }
         }
     }
 
@@ -40,7 +53,19 @@ public class Enemy2 : MonoBehaviour
         }
     }
 
-    public void TakeDamage( int damage)
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player")) 
+        {
+            CharacterB playerScript = collision.gameObject.GetComponent<CharacterB>();
+            if (playerScript != null)
+            {
+                playerScript.TakeDamage(damage);
+            }
+        }
+    }
+
+    public void TakeDamage(int damage)
     {
         health -= damage;
         Debug.Log(gameObject.name + " took " + damage + " damage! Remaining health: " + health);
