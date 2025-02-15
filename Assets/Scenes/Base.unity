@@ -3225,7 +3225,6 @@ GameObject:
   - component: {fileID: 381326717}
   - component: {fileID: 381326723}
   - component: {fileID: 381326722}
-  - component: {fileID: 381326721}
   - component: {fileID: 381326724}
   m_Layer: 0
   m_Name: A player
@@ -3324,27 +3323,6 @@ Transform:
   - {fileID: 1437340936}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -157.425, z: 0}
---- !u!95 &381326721
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 381326716}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b9ac1a7c9f2ff2a4bb9c34ec6a616f0f, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!54 &381326722
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3370,7 +3348,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 16
+  m_Constraints: 20
   m_CollisionDetection: 1
 --- !u!114 &381326723
 MonoBehaviour:

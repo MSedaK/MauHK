@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-        float decelerationTime = 0.1f;  
+        float decelerationTime = 0.1f;
         float t = 0;
         Vector3 initialVelocity = rb.velocity;
 
@@ -148,14 +148,12 @@ public class PlayerController : MonoBehaviour
         moveDirection = Vector3.zero;
         lastMouseDirection = Vector3.forward;
 
-        // Animator ve hareket deðiþkenlerini de resetle
         if (anim != null)
         {
             anim.SetBool("isMoving", false);
             anim.SetBool("isRunning", false);
         }
 
-        // Rigidbody hýzýný sýfýrla
         if (rb != null)
         {
             rb.velocity = Vector3.zero;

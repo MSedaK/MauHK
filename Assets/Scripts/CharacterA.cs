@@ -28,7 +28,6 @@ public class CharacterA : MonoBehaviour
 
     void Start()
     {
-        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -48,7 +47,6 @@ public class CharacterA : MonoBehaviour
     IEnumerator Attack()
     {
         canAttack = false;
-        anim.SetTrigger("Attack");
 
         yield return new WaitForSeconds(0.2f);
 
@@ -66,7 +64,6 @@ public class CharacterA : MonoBehaviour
     {
         canDash = false;
         isDashing = true;
-        anim.SetTrigger("Dash");
 
         Vector3 dashDirection = transform.forward;
         float startTime = Time.time;

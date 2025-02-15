@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
         characterA.SetActive(true);
         characterB.SetActive(false);
 
-        cameraFollow = Camera.main.GetComponent<CameraFollow>(); 
+        cameraFollow = Camera.main.GetComponent<CameraFollow>();
         cameraFollow.SetTarget(activeCharacter.transform);
     }
 
@@ -37,5 +37,5 @@ public class GameManager : MonoBehaviour
         activeCharacter.SetActive(true);
 
         cameraFollow.SetTarget(activeCharacter.transform);
-    }
+    }
 }
