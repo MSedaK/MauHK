@@ -3,7 +3,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int health = 100;
-    public GameObject hitEffect; // Hasar efekti için
+    public GameObject hitEffect; 
 
     public void TakeDamage(int damage)
     {
@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
 
         if (hitEffect != null)
         {
-            Instantiate(hitEffect, transform.position, Quaternion.identity); // Hasar efekti
+            Instantiate(hitEffect, transform.position, Quaternion.identity);
         }
 
         if (health <= 0)

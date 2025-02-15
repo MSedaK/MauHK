@@ -13,8 +13,8 @@ public class GameManager : MonoBehaviour
         characterA.SetActive(true);
         characterB.SetActive(false);
 
-        cameraFollow = Camera.main.GetComponent<CameraFollow>(); // Kamera takip scriptini al
-        cameraFollow.SetTarget(activeCharacter.transform); // Ýlk karakteri takip et
+        cameraFollow = Camera.main.GetComponent<CameraFollow>(); 
+        cameraFollow.SetTarget(activeCharacter.transform);
     }
 
     void Update()
@@ -36,6 +36,6 @@ public class GameManager : MonoBehaviour
         activeCharacter.transform.position = currentPosition;
         activeCharacter.SetActive(true);
 
-        cameraFollow.SetTarget(activeCharacter.transform); // Kamera yeni karakteri takip etsin
-    }
+        cameraFollow.SetTarget(activeCharacter.transform);
+    }
 }

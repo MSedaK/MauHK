@@ -41,6 +41,6 @@ public class Bomb : MonoBehaviour
             }
 
             Destroy(gameObject); // Çarpýnca yok ol
-        }
+        }
     }
 }
