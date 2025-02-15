@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 3741286912344156822}
   - component: {fileID: 310522817687722074}
   - component: {fileID: -3234039878938876606}
+  - component: {fileID: 4649391480463238654}
   m_Layer: 0
   m_Name: Sphere 1
-  m_TagString: Untagged
+  m_TagString: Bomb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -133,3 +134,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 4
   m_CollisionDetection: 0
+--- !u!114 &4649391480463238654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931314671317227075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583a0f3a50725754cab4a56ad094ea43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 50
+  explosionRadius: 1.5
+  explosionEffect: {fileID: 0}

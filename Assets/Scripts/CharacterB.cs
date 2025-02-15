@@ -172,8 +172,12 @@ public class CharacterB : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
-        GameObject sphere = Instantiate(sphereType, firePoint.position, Quaternion.identity);
-        Rigidbody rb = sphere.GetComponent<Rigidbody>();
+        GameObject bomb = Instantiate(sphereType, firePoint.position, Quaternion.identity);
+        Rigidbody rb = bomb.GetComponent<Rigidbody>();
+
+        bomb.tag = "Bomb"; // Bomb tag'ini atýyoruz
+        Bomb bombScript = bomb.AddComponent<Bomb>(); // Bomb scripti ekle
+        bombScript.damage = (sphereType == spherePrefab) ? 10 : 20; // Eðer Strong ise 20 hasar
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
@@ -199,8 +203,12 @@ public class CharacterB : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
-        GameObject sphere = Instantiate(strongSpherePrefab, firePoint.position, Quaternion.identity);
-        Rigidbody rb = sphere.GetComponent<Rigidbody>();
+        GameObject bomb = Instantiate(strongSpherePrefab, firePoint.position, Quaternion.identity);
+        Rigidbody rb = bomb.GetComponent<Rigidbody>();
+
+        bomb.tag = "Bomb"; // Bomb tag'ini atýyoruz
+        Bomb bombScript = bomb.AddComponent<Bomb>(); // Bomb scripti ekle
+        bombScript.damage = 20; // Güçlü bombanýn hasarý daha fazla
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
