@@ -4,12 +4,13 @@ using UnityEngine.AI;
 public class Enemy1 : MonoBehaviour
 {
     public int health = 100;
-    public GameObject projectilePrefab; 
+    public GameObject projectilePrefab;
+    public GameObject hitEffect;
     public Transform firePoint;
-    public float attackRange = 10f; 
-    public float fireRate = 2f; 
+    public float attackRange = 10f;
+    public float fireRate = 2f;
     private float nextFireTime = 0f;
-    public float moveSpeed = 3f; 
+    public float moveSpeed = 3f;
 
     private Transform player;
     private NavMeshAgent agent;
@@ -18,7 +19,7 @@ public class Enemy1 : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
-        agent.speed = moveSpeed; 
+        agent.speed = moveSpeed;
     }
 
     void Update()
@@ -33,7 +34,7 @@ public class Enemy1 : MonoBehaviour
         }
         else
         {
-            agent.SetDestination(transform.position); 
+            agent.SetDestination(transform.position);
             if (Time.time >= nextFireTime)
             {
                 nextFireTime = Time.time + fireRate;
@@ -57,6 +58,11 @@ public class Enemy1 : MonoBehaviour
     {
         health -= damage;
         Debug.Log(gameObject.name + " took " + damage + " damage! Remaining health: " + health);
+
+        if (hitEffect != null)
+        {
+            Instantiate(hitEffect, transform.position, Quaternion.identity);
+        }
 
         if (health <= 0)
         {
