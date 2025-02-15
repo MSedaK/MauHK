@@ -140,4 +140,27 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(attackType == "Attack" ? attackCooldown : strongAttackCooldown);
         canAttack = true;
     }
+
+    public void ResetState()
+    {
+        isDashing = false;
+        canDash = true;
+        moveDirection = Vector3.zero;
+        lastMouseDirection = Vector3.forward;
+
+        // Animator ve hareket deðiþkenlerini de resetle
+        if (anim != null)
+        {
+            anim.SetBool("isMoving", false);
+            anim.SetBool("isRunning", false);
+        }
+
+        // Rigidbody hýzýný sýfýrla
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    }
+
 }
