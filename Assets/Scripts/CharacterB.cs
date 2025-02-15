@@ -35,10 +35,19 @@ public class CharacterB : MonoBehaviour
     public float staminaRegenRate = 10f;
     public Slider staminaBar;
 
+    [Header("Health Settings")]
+    public int maxHealth = 100;
+    public int currentHealth;
+    public int damageTaken = 20; // Düþmandan alýnan hasar
+    public Slider healthBar;
+    public Image[] healthSegments; 
+
     private Vector3 lastMouseDirection = Vector3.zero; // Son mouse yönünü saklýyoruz
 
     void Start()
     {
+        currentHealth = maxHealth;
+        UpdateHealthUI();
         anim = GetComponent<Animator>();
         stamina = maxStamina;
         staminaBar.maxValue = maxStamina;
@@ -110,6 +119,40 @@ public class CharacterB : MonoBehaviour
                 StartCoroutine(ShowUIPanel()); // UI Panel aç
             }
         }
+
+        if (other.CompareTag("Enemy")) // Enemy'e temas ederse
+        {
+            TakeDamage(damageTaken);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            Die();
+        }
+        UpdateHealthUI();
+    }
+
+    void UpdateHealthUI()
+    {
+        float healthPercentage = (float)currentHealth / maxHealth;
+        healthBar.value = healthPercentage; // Slider güncelle
+
+        int activeSegments = Mathf.RoundToInt(healthPercentage * healthSegments.Length);
+        for (int i = 0; i < healthSegments.Length; i++)
+        {
+            healthSegments[i].enabled = i < activeSegments; // Parçalý bar güncelle
+        }
+    }
+
+    void Die()
+    {
+        Debug.Log("Karakter öldü!");
+        gameObject.SetActive(false); // Þimdilik karakteri yok edelim
     }
 
     IEnumerator ShowUIPanel()
