@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     [Header("VFX Settings")]
     public GameObject swapVFXPrefab; // VFX prefab'ini buraya atacaðýz
 
+    [Header("Music Settings")]
+    public AudioClip backgroundMusic;  // Müzik dosyasýný buraya atayacaðýz
+    private AudioSource audioSource;    // AudioSource component'ini tanýmlýyoruz
+
     void Start()
     {
         activeCharacter = characterA;
@@ -18,6 +22,15 @@ public class GameManager : MonoBehaviour
 
         cameraFollow = Camera.main.GetComponent<CameraFollow>();
         cameraFollow.SetTarget(activeCharacter.transform);
+
+        // Müzik çalar (AudioSource) component'ini alýyoruz ve müziði baþlatýyoruz
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource != null && backgroundMusic != null)
+        {
+            audioSource.clip = backgroundMusic;
+            audioSource.loop = true;  // Müzik sürekli çalsýn
+            audioSource.Play();
+        }
     }
 
     void Update()

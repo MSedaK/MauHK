@@ -42,9 +42,14 @@ public class CharacterB : MonoBehaviour
     public Slider healthBar;
     public Image[] healthSegments;
 
+    [Header("Audio Settings")]
+    public AudioClip attackSound; 
+    public AudioClip strongAttackSound; 
+    private AudioSource audioSource; 
+
     private Vector3 lastMouseDirection = Vector3.zero;
 
-    private bool canvasOpened = false; // To track if the canvas has been opened
+    private bool canvasOpened = false; 
 
     void Start()
     {
@@ -55,6 +60,8 @@ public class CharacterB : MonoBehaviour
         staminaBar.maxValue = maxStamina;
         staminaBar.value = stamina;
         rb = GetComponent<Rigidbody>();
+
+        audioSource = GetComponent<AudioSource>(); 
 
         if (infoPanel != null)
             infoPanel.SetActive(false);
@@ -86,11 +93,11 @@ public class CharacterB : MonoBehaviour
         if (moveDirection.magnitude >= 0.1f)
         {
             rb.velocity = moveDirection * moveSpeed + new Vector3(0, rb.velocity.y, 0);
-            anim.SetFloat("Speed", rb.velocity.magnitude); // Hareket animasyonu için Speed parametresi
+            anim.SetFloat("Speed", rb.velocity.magnitude); 
         }
         else
         {
-            anim.SetFloat("Speed", 0); // Durduğunda Idle animasyonunu başlatır
+            anim.SetFloat("Speed", 0); 
         }
     }
 
@@ -113,7 +120,6 @@ public class CharacterB : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // TriggerZoneB'ye girdiğinde Canvas açılır
         if (other.CompareTag("TriggerZoneB") && !canvasOpened)
         {
             if (!triggeredZones.Contains(other.gameObject.name))
@@ -132,13 +138,13 @@ public class CharacterB : MonoBehaviour
     void OpenCanvas()
     {
         infoPanel.SetActive(true);
-        canvasOpened = true; // Canvas açıldı
+        canvasOpened = true; 
     }
 
     public void CloseCanvas()
     {
         infoPanel.SetActive(false);
-        canvasOpened = false; // Canvas kapandı
+        canvasOpened = false;
     }
 
     public void TakeDamage(int damage)
@@ -173,7 +179,13 @@ public class CharacterB : MonoBehaviour
     IEnumerator Attack(GameObject sphereType, float speed)
     {
         canAttack = false;
-        anim.SetBool("IsAttacking", true); // Attack animasyonu başlat
+        anim.SetBool("IsAttacking", true); 
+
+        // Play attack sound
+        if (audioSource != null && attackSound != null)
+        {
+            audioSource.PlayOneShot(attackSound);
+        }
 
         yield return new WaitForSeconds(0.1f);
 
@@ -189,7 +201,7 @@ public class CharacterB : MonoBehaviour
 
         yield return new WaitForSeconds(attackCooldown / 2f);
         canAttack = true;
-        anim.SetBool("IsAttacking", false); // Attack animasyonunu durdur
+        anim.SetBool("IsAttacking", false); 
     }
 
     IEnumerator StrongAttack()
@@ -197,7 +209,13 @@ public class CharacterB : MonoBehaviour
         canAttack = false;
         stamina -= strongAttackCost;
         staminaBar.value = stamina;
-        anim.SetBool("IsStrongAttacking", true); // Strong Attack animasyonu başlat
+        anim.SetBool("IsStrongAttacking", true); 
+
+        // Play strong attack sound
+        if (audioSource != null && strongAttackSound != null)
+        {
+            audioSource.PlayOneShot(strongAttackSound);
+        }
 
         yield return new WaitForSeconds(0.2f);
 
@@ -213,7 +231,7 @@ public class CharacterB : MonoBehaviour
 
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
-        anim.SetBool("IsStrongAttacking", false); // Strong Attack animasyonunu durdur
+        anim.SetBool("IsStrongAttacking", false); 
     }
 
     Vector3 GetShootDirection()
