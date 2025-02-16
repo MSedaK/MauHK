@@ -73,6 +73,7 @@ public class CharacterB : MonoBehaviour
         {
             StartCoroutine(StrongAttack());
         }
+
         RegenerateStamina();
     }
 
@@ -81,15 +82,15 @@ public class CharacterB : MonoBehaviour
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
-        if (lastMouseDirection.magnitude >= 0.1f)
+        moveDirection = new Vector3(moveX, 0, moveZ).normalized;
+        if (moveDirection.magnitude >= 0.1f)
         {
-            Vector3 forwardDirection = lastMouseDirection;
-            moveDirection = (forwardDirection * moveZ + Vector3.Cross(Vector3.up, forwardDirection) * moveX).normalized;
-
-            if (moveDirection.magnitude >= 0.1f)
-            {
-                rb.velocity = moveDirection * moveSpeed + new Vector3(0, rb.velocity.y, 0);
-            }
+            rb.velocity = moveDirection * moveSpeed + new Vector3(0, rb.velocity.y, 0);
+            anim.SetFloat("Speed", rb.velocity.magnitude); // Hareket animasyonu için Speed parametresi
+        }
+        else
+        {
+            anim.SetFloat("Speed", 0); // Durduğunda Idle animasyonunu başlatır
         }
     }
 
@@ -128,14 +129,12 @@ public class CharacterB : MonoBehaviour
         }
     }
 
-    // Canvas açma işlemi
     void OpenCanvas()
     {
         infoPanel.SetActive(true);
         canvasOpened = true; // Canvas açıldı
     }
 
-    // Canvas kapama işlemi
     public void CloseCanvas()
     {
         infoPanel.SetActive(false);
@@ -174,7 +173,7 @@ public class CharacterB : MonoBehaviour
     IEnumerator Attack(GameObject sphereType, float speed)
     {
         canAttack = false;
-        anim.SetTrigger("Attack");
+        anim.SetBool("IsAttacking", true); // Attack animasyonu başlat
 
         yield return new WaitForSeconds(0.1f);
 
@@ -190,6 +189,7 @@ public class CharacterB : MonoBehaviour
 
         yield return new WaitForSeconds(attackCooldown / 2f);
         canAttack = true;
+        anim.SetBool("IsAttacking", false); // Attack animasyonunu durdur
     }
 
     IEnumerator StrongAttack()
@@ -197,7 +197,7 @@ public class CharacterB : MonoBehaviour
         canAttack = false;
         stamina -= strongAttackCost;
         staminaBar.value = stamina;
-        anim.SetTrigger("Attack");
+        anim.SetBool("IsStrongAttacking", true); // Strong Attack animasyonu başlat
 
         yield return new WaitForSeconds(0.2f);
 
@@ -213,6 +213,7 @@ public class CharacterB : MonoBehaviour
 
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
+        anim.SetBool("IsStrongAttacking", false); // Strong Attack animasyonunu durdur
     }
 
     Vector3 GetShootDirection()
