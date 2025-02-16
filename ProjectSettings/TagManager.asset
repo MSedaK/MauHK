@@ -10,6 +10,8 @@ TagManager:
   - TriggerZone
   - Projectile
   - Bomb
+  - TriggerZoneB
+  - TriggerZoneA
   layers:
   - Default
   - TransparentFX

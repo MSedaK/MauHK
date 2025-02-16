@@ -44,6 +44,8 @@ public class CharacterB : MonoBehaviour
 
     private Vector3 lastMouseDirection = Vector3.zero;
 
+    private bool canvasOpened = false; // To track if the canvas has been opened
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -108,15 +110,15 @@ public class CharacterB : MonoBehaviour
         }
     }
 
-
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("TriggerZone"))
+        // TriggerZoneB'ye girdiğinde Canvas açılır
+        if (other.CompareTag("TriggerZoneB") && !canvasOpened)
         {
             if (!triggeredZones.Contains(other.gameObject.name))
             {
                 triggeredZones.Add(other.gameObject.name);
-                StartCoroutine(ShowUIPanel());
+                OpenCanvas();
             }
         }
 
@@ -124,6 +126,20 @@ public class CharacterB : MonoBehaviour
         {
             TakeDamage(damageTaken);
         }
+    }
+
+    // Canvas açma işlemi
+    void OpenCanvas()
+    {
+        infoPanel.SetActive(true);
+        canvasOpened = true; // Canvas açıldı
+    }
+
+    // Canvas kapama işlemi
+    public void CloseCanvas()
+    {
+        infoPanel.SetActive(false);
+        canvasOpened = false; // Canvas kapandı
     }
 
     public void TakeDamage(int damage)
@@ -153,16 +169,6 @@ public class CharacterB : MonoBehaviour
     {
         Debug.Log("Karakter öldü!");
         gameObject.SetActive(false);
-    }
-
-    IEnumerator ShowUIPanel()
-    {
-        if (infoPanel != null)
-        {
-            infoPanel.SetActive(true);
-            yield return new WaitForSeconds(3f);
-            infoPanel.SetActive(false);
-        }
     }
 
     IEnumerator Attack(GameObject sphereType, float speed)
@@ -221,7 +227,6 @@ public class CharacterB : MonoBehaviour
 
         return lastMouseDirection;
     }
-
 
     void RegenerateStamina()
     {
