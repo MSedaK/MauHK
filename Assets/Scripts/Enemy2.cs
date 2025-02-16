@@ -12,13 +12,14 @@ public class Enemy2 : MonoBehaviour
 
     private Transform player;
     private NavMeshAgent agent;
+    private GameManager gameManager; // GameManager referansý ekliyoruz
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         agent.speed = moveSpeed;
-        agent.speed = moveSpeed;
+        gameManager = FindObjectOfType<GameManager>(); // GameManager'ý buluyoruz
     }
 
     void Update()
@@ -65,6 +66,7 @@ public class Enemy2 : MonoBehaviour
         }
     }
 
+    // TakeDamage fonksiyonunu public yapýyoruz
     public void TakeDamage(int damage)
     {
         health -= damage;
@@ -72,13 +74,14 @@ public class Enemy2 : MonoBehaviour
 
         if (health <= 0)
         {
-            Die();
+            Die(damage); // Ölünce GameManager'a damage'ý bildiriyoruz
         }
     }
 
-    void Die()
+    void Die(int damage)
     {
         Debug.Log(gameObject.name + " has been defeated!");
+        gameManager.EnemyKilled(damage); // GameManager'a damage parametresi gönderiyoruz
         Destroy(gameObject);
     }
 }

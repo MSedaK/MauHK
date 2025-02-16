@@ -7,11 +7,14 @@ TagManager:
   - CinemachineTarget
   - Enemy
   - Ground
-  - TriggerZone
   - Projectile
   - Bomb
   - TriggerZoneB
   - TriggerZoneA
+  - TriggerZoneC
+  - TriggerZoneD
+  - TriggerZoneE
+  - TriggerZoneF
   layers:
   - Default
   - TransparentFX
