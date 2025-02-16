@@ -7,6 +7,9 @@ public class GameManager : MonoBehaviour
     private GameObject activeCharacter;
     private CameraFollow cameraFollow;
 
+    [Header("VFX Settings")]
+    public GameObject swapVFXPrefab; // VFX prefab'ini buraya atacaðýz
+
     void Start()
     {
         activeCharacter = characterA;
@@ -27,6 +30,11 @@ public class GameManager : MonoBehaviour
 
     void SwapCharacter()
     {
+        if (swapVFXPrefab != null)
+        {
+            Instantiate(swapVFXPrefab, activeCharacter.transform.position, Quaternion.identity);
+        }
+
         Vector3 currentPosition = activeCharacter.transform.position;
 
         activeCharacter.SetActive(false);
@@ -34,6 +42,7 @@ public class GameManager : MonoBehaviour
         activeCharacter = (activeCharacter == characterA) ? characterB : characterA;
 
         activeCharacter.transform.position = currentPosition;
+
         activeCharacter.SetActive(true);
 
         cameraFollow.SetTarget(activeCharacter.transform);

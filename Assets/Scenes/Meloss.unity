@@ -351,7 +351,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &21498225
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1197,6 +1197,7 @@ MonoBehaviour:
   attackCooldown: 1.5
   damage: 15
   moveSpeed: 3.5
+  healthBar: {fileID: 0}
 --- !u!1001 &73442535
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4300,7 +4301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRange: 1.5
-  baseAttackDamage: 50
+  baseAttackDamage: 25
   extraDamageToPreferredEnemies: 10
   extraDamageFromWeaknessEnemies: 5
   enemyLayer:
@@ -22261,22 +22262,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d9cba68de37236945b2ee925c13b27b5,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.208063
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d9cba68de37236945b2ee925c13b27b5,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d9cba68de37236945b2ee925c13b27b5,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.97811544
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d9cba68de37236945b2ee925c13b27b5,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d9cba68de37236945b2ee925c13b27b5,
         type: 3}
@@ -22286,7 +22287,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d9cba68de37236945b2ee925c13b27b5,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -155.982
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d9cba68de37236945b2ee925c13b27b5,
         type: 3}
@@ -22416,6 +22417,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9cba68de37236945b2ee925c13b27b5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d9cba68de37236945b2ee925c13b27b5,
         type: 3}
@@ -27396,6 +27402,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterA: {fileID: 381326716}
   characterB: {fileID: 1259354124}
+  swapVFXPrefab: {fileID: 8593464584776411535, guid: b21d155ec7ea5a349a0e36106f913148,
+    type: 3}
 --- !u!4 &1392571718
 Transform:
   m_ObjectHideFlags: 0
@@ -33173,11 +33181,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a77f9f122b1b84391dccd54f1d40dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 200
   attackRange: 2
   attackCooldown: 1.5
   damage: 15
   moveSpeed: 3.5
+  healthBar: {fileID: 0}
 --- !u!114 &1931597748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33190,7 +33199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cae280552b8de44caf479af8f03c430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 200
   hitEffect: {fileID: 0}
 --- !u!195 &1931597749
 NavMeshAgent:
@@ -34383,6 +34392,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7258731222260567888, guid: 061887867acfab64cab0e8062cff93ba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7258731222260567888, guid: 061887867acfab64cab0e8062cff93ba,
         type: 3}
