@@ -1,24 +1,26 @@
-using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine;
 
 public class Enemy1 : MonoBehaviour
 {
     public int health = 100;
-    public GameObject projectilePrefab; 
+    public GameObject projectilePrefab;
     public Transform firePoint;
-    public float attackRange = 10f; 
-    public float fireRate = 2f; 
+    public float attackRange = 10f;
+    public float fireRate = 2f;
     private float nextFireTime = 0f;
-    public float moveSpeed = 3f; 
+    public float moveSpeed = 3f;
 
     private Transform player;
     private NavMeshAgent agent;
+    private GameManager gameManager;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
-        agent.speed = moveSpeed; 
+        agent.speed = moveSpeed;
+        gameManager = FindObjectOfType<GameManager>(); // GameManager'ý buluyoruz
     }
 
     void Update()
@@ -33,7 +35,7 @@ public class Enemy1 : MonoBehaviour
         }
         else
         {
-            agent.SetDestination(transform.position); 
+            agent.SetDestination(transform.position);
             if (Time.time >= nextFireTime)
             {
                 nextFireTime = Time.time + fireRate;
@@ -53,6 +55,7 @@ public class Enemy1 : MonoBehaviour
         Debug.Log(gameObject.name + " fired at the player!");
     }
 
+    // TakeDamage fonksiyonunu public yapýyoruz
     public void TakeDamage(int damage)
     {
         health -= damage;
@@ -60,13 +63,14 @@ public class Enemy1 : MonoBehaviour
 
         if (health <= 0)
         {
-            Die();
+            Die(damage);  // Ölünce GameManager'a damage'ý bildiriyoruz
         }
     }
 
-    void Die()
+    void Die(int damage)
     {
         Debug.Log(gameObject.name + " has been defeated!");
+        gameManager.EnemyKilled(damage); // GameManager'a damage parametresi gönderiyoruz
         Destroy(gameObject);
     }
 }
