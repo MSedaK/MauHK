@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -7,20 +9,37 @@ public class GameManager : MonoBehaviour
     public GameObject characterA;
     public GameObject characterB;
     private GameObject activeCharacter;
+    private CameraFollow cameraFollow;
 
-    [Header("Game Over Panel")]
-    public GameObject gameOverPanel; // GameOver paneli
-    public TMP_Text gameOverScoreText; // Skoru GameOver paneline yazdýran TextMeshPro referansý
-    public GameObject restartButton; // Restart butonu
+    [Header("VFX Settings")]
+    public GameObject swapVFXPrefab;
+
+    [Header("Music Settings")]
+    public AudioClip backgroundMusic;
+    private AudioSource audioSource;
 
     [Header("Enemy Spawn Settings")]
-    public Transform[] spawnPoints; // Düþman spawn noktalarý
-    public GameObject[] enemyPrefabs; // Düþman prefablarý
-    public int enemiesPerSpawn = 3; // Her spawn noktasýnda spawn olacak düþman sayýsý
-    private float spawnDelay = 2f; // Spawn aralýðý
+    public Transform[] spawnPoints;
+    public GameObject[] enemyPrefabs;
+    public int enemiesPerSpawn = 3;
+    private float spawnDelay = 2f;
     private float nextSpawnTime = 0f;
 
-    private int score = 0; // Skor
+    [Header("Score Settings")]
+    public int score = 0;
+
+    [Header("Health Settings")]
+    public int maxHealth = 10;
+    private int health;
+
+    // UI Referanslarý
+    public TMP_Text scoreText;
+    public TMP_Text healthText;
+    public GameObject gameOverPanel;
+    public TMP_Text gameOverScoreText;
+    public GameObject restartButton;
+
+    private bool canvasOpened = false;
 
     void Start()
     {
@@ -28,29 +47,53 @@ public class GameManager : MonoBehaviour
         characterA.SetActive(true);
         characterB.SetActive(false);
 
-        gameOverPanel.SetActive(false); // GameOver paneli baþlangýçta gizli olacak
+        cameraFollow = Camera.main.GetComponent<CameraFollow>();
+        cameraFollow.SetTarget(activeCharacter.transform);
 
-        // Ýlk düþman spawn'ýný baþlatýyoruz
-        nextSpawnTime = Time.time + spawnDelay;
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource != null && backgroundMusic != null)
+        {
+            audioSource.clip = backgroundMusic;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
+
+        health = maxHealth;
+        UpdateUI();
+        gameOverPanel.SetActive(false);
     }
 
     void Update()
     {
-        // Karakterlerin ölümünü kontrol et
-        if (characterA.GetComponent<CharacterHealth>().IsDead() || characterB.GetComponent<CharacterHealth>().IsDead())
-        {
-            GameOver();
-        }
-
-        // Düþman spawn iþlemi
         if (Time.time >= nextSpawnTime)
         {
             SpawnEnemies();
-            nextSpawnTime = Time.time + spawnDelay; // Spawn gecikmesini ayarlýyoruz
+            nextSpawnTime = Time.time + spawnDelay;
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SwapCharacter();
         }
     }
 
-    // Düþmanlarý spawn etme
+    void SwapCharacter()
+    {
+        if (swapVFXPrefab != null)
+        {
+            Instantiate(swapVFXPrefab, activeCharacter.transform.position, Quaternion.identity);
+        }
+
+        Vector3 currentPosition = activeCharacter.transform.position;
+
+        activeCharacter.SetActive(false);
+        activeCharacter = (activeCharacter == characterA) ? characterB : characterA;
+        activeCharacter.transform.position = currentPosition;
+        activeCharacter.SetActive(true);
+
+        cameraFollow.SetTarget(activeCharacter.transform);
+    }
+
     void SpawnEnemies()
     {
         foreach (Transform spawnPoint in spawnPoints)
@@ -63,61 +106,65 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Oyun bittiðinde Game Over panelini göster
-    public void GameOver()
+    public void EnemyKilled(int damage)
     {
-        Time.timeScale = 0f; // Oyunu duraklatýyoruz
-        gameOverPanel.SetActive(true); // Game Over panelini gösteriyoruz
-        gameOverScoreText.text = "Final Score: " + score; // Skoru Game Over panelinde gösteriyoruz
-        restartButton.SetActive(true); // Restart butonunu aktif hale getiriyoruz
+        score += damage;
+        UpdateUI();
     }
 
-    // Oyunu yeniden baþlat
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        UpdateUI();
+
+        if (damage >= 2 || health <= 0)
+        {
+            GameOver();
+        }
+    }
+
+    void UpdateUI()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + score;
+        }
+        if (healthText != null)
+        {
+            healthText.text = "Health: " + health;
+        }
+    }
+
+    public void GameOver()
+    {
+        Time.timeScale = 0f;
+        gameOverPanel.SetActive(true);
+        gameOverScoreText.text = "Final Score: " + score;
+        restartButton.SetActive(true);
+    }
+
     public void RestartGame()
     {
-        Time.timeScale = 1f; // Oyunu baþlatýyoruz
-        score = 0; // Skoru sýfýrlýyoruz
-        gameOverPanel.SetActive(false); // Game Over panelini kapatýyoruz
-
-        // Baþlangýçta her iki karakteri de aktif hale getirin
+        Time.timeScale = 1f;
+        score = 0;
+        health = maxHealth;
+        UpdateUI();
+        gameOverPanel.SetActive(false);
         characterA.SetActive(true);
         characterB.SetActive(false);
         activeCharacter = characterA;
 
-        // Karakterlerin saðlýklarýný sýfýrlayalým
-        characterA.GetComponent<CharacterHealth>().health = 100;
-        characterB.GetComponent<CharacterHealth>().health = 100;
-
-        // Tüm düþmanlarý temizleyelim
         foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
             Destroy(enemy);
         }
     }
 
-    // Skoru güncelle
-    public void UpdateScore(int points)
+    void OnDestroy()
     {
-        score += points;
-    }
-
-    // EnemyKilled fonksiyonunu public yapýyoruz
-    public void EnemyKilled(int damage)
-    {
-        int killBonus = 10; // Ekstra öldürme bonusu ekleyebilirsiniz
-
-        // Skor hesaplama
-        score += damage + killBonus;
-        Debug.Log("Score: " + score);
-
-        // Skorun UI'ye yansýmasý
-        UpdateScoreUI();
-    }
-
-    // Skoru UI'ye yansýtma
-    private void UpdateScoreUI()
-    {
-        // Burada skoru ekrana yazdýrabilirsiniz.
-        Debug.Log("Updated Score: " + score);
+        if (gameObject.CompareTag("Player"))
+        {
+            GameOver();
+        }
     }
 }
