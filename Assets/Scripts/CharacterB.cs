@@ -69,8 +69,6 @@ public class CharacterB : MonoBehaviour
 
     void Update()
     {
-        RotateTowardsMouse();
-        HandleMovement();
 
         if (Input.GetMouseButtonDown(0) && canAttack)
         {
@@ -82,40 +80,6 @@ public class CharacterB : MonoBehaviour
         }
 
         RegenerateStamina();
-    }
-
-    void HandleMovement()
-    {
-        float moveX = Input.GetAxis("Horizontal");
-        float moveZ = Input.GetAxis("Vertical");
-
-        moveDirection = new Vector3(moveX, 0, moveZ).normalized;
-        if (moveDirection.magnitude >= 0.1f)
-        {
-            rb.velocity = moveDirection * moveSpeed + new Vector3(0, rb.velocity.y, 0);
-            anim.SetFloat("Speed", rb.velocity.magnitude); 
-        }
-        else
-        {
-            anim.SetFloat("Speed", 0); 
-        }
-    }
-
-    void RotateTowardsMouse()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            Vector3 targetPosition = hit.point;
-            targetPosition.y = transform.position.y;
-
-            Vector3 direction = (targetPosition - transform.position).normalized;
-            if (direction.magnitude > 0.1f)
-            {
-                lastMouseDirection = direction;
-                transform.rotation = Quaternion.LookRotation(direction);
-            }
-        }
     }
 
     void OnTriggerEnter(Collider other)

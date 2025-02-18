@@ -69,22 +69,27 @@ public class PlayerController : MonoBehaviour
         float moveZ = Input.GetAxis("Vertical");
 
         Vector3 forwardDirection = lastMouseDirection;
-
         moveDirection = (forwardDirection * moveZ + Vector3.Cross(Vector3.up, forwardDirection) * moveX).normalized;
 
-        if (moveDirection.magnitude >= 0.1f)
+        bool isCharacterMoving = moveDirection.magnitude >= 0.1f;
+
+        // **Animator'a isMoving durumunu gönder**
+        anim.SetBool("isMoving", isCharacterMoving);
+
+        Debug.Log("isMoving deðeri: " + isCharacterMoving); // **Konsolda çýktýyý gör**
+
+        if (isCharacterMoving)
         {
             float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
             rb.velocity = moveDirection * speed + new Vector3(0, rb.velocity.y, 0);
-            anim.SetBool("isMoving", true);
-            anim.SetBool("isRunning", Input.GetKey(KeyCode.LeftShift));
         }
         else
         {
-            anim.SetBool("isMoving", false);
-            anim.SetBool("isRunning", false);
+            rb.velocity = Vector3.zero;
         }
     }
+
+
 
     IEnumerator Dash()
     {
